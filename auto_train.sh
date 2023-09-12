@@ -1,4 +1,4 @@
-rm -rf task_subset-*
+#rm -rf task_subset-*
 for i in {0..29} ; do
 mkdir task_subset-$i
 cp subset-$i.traj v_Si.traj train.py predict_subset_score.py task_subset-$i/
