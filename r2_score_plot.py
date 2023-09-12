@@ -29,10 +29,14 @@ result = subprocess.run([command, filename], stdout=subprocess.PIPE, stderr=subp
 output = result.stdout
 print(f'\n"""\n{output}\n"""\n')
 train_params = train_params.readlines()
+kernel_tag = False
 for i in range(len(train_params)):
     if 'kernel_kw' in train_params[i].split('\n')[0]:
         kernel = [train_params[i].split('\n')[0]]
+        kernel_tag = True
         break
+if not kernel_tag:
+    kernel = ['kernel_kw = dict(lmax=3, nmax=3, exponent=4, cutoff=6.0)']
 
 train_set = input(" > What is your train set's name? (ex: Si_16, if filename is 'Si_16.traj') : ")
 ediff = input(" > What is the ediff value? : ")
