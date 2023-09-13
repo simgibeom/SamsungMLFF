@@ -1,6 +1,9 @@
 diff=1 # ex) 1 ==> 0.1 | 01 ==> 0.01 
 old_diff=4
-touch diff-0$diff.log
+
+echo "### ediff / fdiff / ediff_tot = 0.$diff ###" > diff-0$diff.log
+echo "  "  >> diff-0$diff.log
+
 for i in {0..29} ; do
 cd task_subset-$i/
 mkdir re-0$diff
@@ -112,8 +115,6 @@ if rank == 0:
     message(msg)
 !
 mpirun -np 2 python predict_subset_score.py
-echo "### ediff / fdiff / ediff_tot = 0.$diff ###" >> ../../diff-0$diff.log
-echo "  "  >> ../../diff-0$diff.log
 score=`grep SCORE predict.log`
 
 echo " "
