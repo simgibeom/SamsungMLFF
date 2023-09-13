@@ -45,7 +45,7 @@ def generate_subset_randomly(filename, each_subset_size=50):
     size = 0
     atoms = train.copy()
     for i in range(len(each_subset_size_list)):
-        traj = Trajectory(filename=f'subset-{i}', mode='w')
+        traj = Trajectory(filename=f'subset-{i}.traj', mode='w')
         for j in range(each_subset_size_list[i]):
             traj.write(atoms[randomized_list[j+size]])
         traj.close()
