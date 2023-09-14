@@ -4,3 +4,11 @@ v_Si.traj : validation set
 
 
 * The base model is too large data to upload. So please refer to the Dropbox.
+
+
+[ auto_train_bcm_score.sh ]
+* If use "auto_train_bcm_score.sh", you can train sub-models and predict values(energies and forces of validation set) through BCM.
+  And you can automatically train each models and predict values(using BCM) using *diff=0.4 -> *diff=0.1 -> *diff=0.01, sequentially. 
+* But you need to modify some parameters of this script depending on your environment.
+* In this version, even if the model.pckl file was not generated at *diff=0.4, the model will be automatically trained using *diff=0.1 in the next step.
+
