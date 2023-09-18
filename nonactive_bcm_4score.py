@@ -37,7 +37,7 @@ class BCMCalculator(Calculator):
             world_size = distrib.get_world_size()
             self.rank = distrib.get_rank ()
         self.distrib = Distributer(world_size)
-        self.K_sm = {}
+        #self.K_sm = {}
         self.model_dict = {}
         self.step = 0
 
@@ -80,9 +80,9 @@ class BCMCalculator(Calculator):
         timings.append (time.time())
 
         # kernel: covariance values between configuration(atoms) and inducing (LCE)
-        for key in self.model_dict:
-            self.K_sm[key] = self.model_dict[key].gp.kern (self.atoms,
-                                                           self.model_dict[key].X)
+        #for key in self.model_dict:
+        #    self.K_sm[key] = self.model_dict[key].gp.kern (self.atoms,
+        #                                                   self.model_dict[key].X)
         
         energy, covloss_max = self.update_results ()
         timings.append (time.time())
@@ -111,12 +111,14 @@ class BCMCalculator(Calculator):
             covloss_max = min (covloss_max, covloss.max())
 		''' 
 
-        for key in self.K_sm:
-            covloss = self.get_covloss (key, self.K_sm[key])
+        for key in self.model_dict:
+            K_sm = self.model_dict[key].gp.kern (self.atoms,
+                                                           self.model_dict[key].X)
+            covloss = self.get_covloss (key, K_sm)
             covmax = covloss.max()
             covmax2 = covmax*covmax
             covloss_inv += 1.0/covmax2
-            enr_key = self.K_sm[key] @ self.model_dict[key].mu 
+            enr_key = K_sm @ self.model_dict[key].mu 
             mean_key = self.model_dict[key].mean(self.atoms)
             energy += (enr_key.sum())/covmax2
             mean   += (mean_key)/covmax2
