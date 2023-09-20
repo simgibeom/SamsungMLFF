@@ -53,5 +53,5 @@ def generate_subset_randomly(filename, each_subset_size=50):
 
 
 
-filename = 'Si.traj'
-generate_subset_randomly(filename, each_subset_size=50)
+filename = 'Si_6.975.traj'
+generate_subset_randomly(filename, each_subset_size=30)
