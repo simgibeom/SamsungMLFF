@@ -1,15 +1,18 @@
-sub=27
-cut=4.5
+sub=214 # this is not necessary to training test, so enter arbitrary integer.
+cut=6.0  # this value must be float
+range=3
+core=16
 
 # STEP 1) *diff = 0.4
 
 diff=4 # ex) 1 ==> 0.1 | 01 ==> 0.01 
 old_diff=None
 
+echo "  "  >> diff-0$diff.log
 echo "### ediff / fdiff / ediff_tot = 0.$diff  | cutoff = $cut ###" >> diff-0$diff.log
 echo "  "  >> diff-0$diff.log
 
-for i in {0..3} ; do
+for i in $(seq 0 $range) ; do
 mkdir task_subset-$i/
 #mkdir re-0$diff
 cp subset-$i.traj ../v_Si_$sub.traj task_subset-$i/
@@ -45,7 +48,7 @@ data = Trajectory('subset-$i.traj')
 
 ML_calc.include_data(data)
 !
-mpirun -np 4 python train.py
+mpirun -np $core python train.py
 
 cat >predict_subset_score.py <<!
 import torch
@@ -126,7 +129,7 @@ if rank == 0:
     msg += [f'Time spent : {t2-t1}']
     message(msg)
 !
-mpirun -np 2 python predict_subset_score.py
+mpirun -np $core python predict_subset_score.py
 score=`grep Training predict.log`
 
 echo " "
@@ -143,10 +146,11 @@ done
 diff=1 # ex) 1 ==> 0.1 | 01 ==> 0.01 
 old_diff=4
 
+echo "  "  >> diff-0$diff.log
 echo "### ediff / fdiff / ediff_tot = 0.$diff  | cutoff = $cut ###" >> diff-0$diff.log
 echo "  "  >> diff-0$diff.log
 
-for i in {0..3} ; do
+for i in $(seq 0 $range) ; do
 cd task_subset-$i/
 mkdir re-0$diff
 cp subset-$i.traj v_Si_$sub.traj re-0$diff/
@@ -182,7 +186,7 @@ data = Trajectory('subset-$i.traj')
 
 ML_calc.include_data(data)
 !
-mpirun -np 4 python train.py
+mpirun -np $core python train.py
 
 cat >predict_subset_score.py <<!
 import torch
@@ -263,7 +267,7 @@ if rank == 0:
     msg += [f'Time spent : {t2-t1}']
     message(msg)
 !
-mpirun -np 2 python predict_subset_score.py
+mpirun -np $core python predict_subset_score.py
 score=`grep Training predict.log`
 
 echo " "
@@ -280,10 +284,11 @@ done
 diff=01 # ex) 1 ==> 0.1 | 01 ==> 0.01 
 old_diff=1
 
+echo "  "  >> diff-0$diff.log
 echo "### ediff / fdiff / ediff_tot = 0.$diff  | cutoff = $cut ###" >> diff-0$diff.log
 echo "  "  >> diff-0$diff.log
 
-for i in {0..3} ; do
+for i in $(seq 0 $range) ; do
 cd task_subset-$i/re-0$old_diff/
 mkdir re-0$diff
 cp subset-$i.traj v_Si_$sub.traj re-0$diff/
@@ -319,7 +324,7 @@ data = Trajectory('subset-$i.traj')
 
 ML_calc.include_data(data)
 !
-mpirun -np 8 python train.py
+mpirun -np $core python train.py
 
 cat >predict_subset_score.py <<!
 import torch
@@ -400,7 +405,7 @@ if rank == 0:
     msg += [f'Time spent : {t2-t1}']
     message(msg)
 !
-mpirun -np 4 python predict_subset_score.py
+mpirun -np $core python predict_subset_score.py
 score=`grep Training predict.log`
 
 echo " "
@@ -417,10 +422,11 @@ done
 diff=005 # ex) 1 ==> 0.1 | 01 ==> 0.01 
 old_diff=01
 
+echo "  "  >> diff-0$diff.log
 echo "### ediff / fdiff / ediff_tot = 0.$diff  | cutoff = $cut ###" >> diff-0$diff.log
 echo "  "  >> diff-0$diff.log
 
-for i in {0..3} ; do
+for i in $(seq 0 $range) ; do
 cd task_subset-$i/re-01/re-0$old_diff/
 mkdir re-0$diff
 cp subset-$i.traj v_Si_$sub.traj re-0$diff/
@@ -456,7 +462,7 @@ data = Trajectory('subset-$i.traj')
 
 ML_calc.include_data(data)
 !
-mpirun -np 8 python train.py
+mpirun -np $core python train.py
 
 cat >predict_subset_score.py <<!
 import torch
@@ -537,7 +543,7 @@ if rank == 0:
     msg += [f'Time spent : {t2-t1}']
     message(msg)
 !
-mpirun -np 8 python predict_subset_score.py
+mpirun -np $core python predict_subset_score.py
 score=`grep Training predict.log`
 
 echo " "

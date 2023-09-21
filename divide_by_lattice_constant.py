@@ -138,3 +138,10 @@ if __name__ == "__main__":
         source_path  = os.path.join(pwd, f'Si_{key}.traj')
         destination_path = os.path.join(f'{pwd}/{key}', f'Si_{key}.traj')
         shutil.copy(source_path, destination_path)
+
+        source_path  = os.path.join(pwd, 'random_divide.py')
+        destination_path = os.path.join(f'{pwd}/{key}', 'random_divide.py')
+        shutil.copy(source_path, destination_path)
+        source_path  = os.path.join(pwd, 'auto_train.sh')
+        destination_path = os.path.join(f'{pwd}/{key}', 'auto_train.sh')
+        shutil.copy(source_path, destination_path)
