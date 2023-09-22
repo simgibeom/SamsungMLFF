@@ -116,7 +116,7 @@ def index_sort_by_energy(indices_list, energies_list):
 
 if __name__ == "__main__":
     pwd = '.'
-    atoms = Trajectory('Si_27.traj')
+    atoms = Trajectory('Si_N_10.0.traj')
    # v_si = Trajectory('v_Si_16.traj')
     lattice_sort_indices = {}
     for i in range(len(atoms)):
@@ -126,10 +126,10 @@ if __name__ == "__main__":
             lattice_sort_indices[lattice] += [i]
         else:
             lattice_sort_indices[lattice] = [i]
-	for key in lattice_const_dict:
-        value = lattice_const_dict[key]
+    for key in lattice_sort_indices:
+        value = lattice_sort_indices[key]
+        print(f'{key} : {len(value)}')
         traj = Trajectory(f'Si_{key}.traj', 'w')
-        print(key, len(value))
         for i in range(len(value)):
             traj.write(atoms[i])
         traj.close()
@@ -141,7 +141,4 @@ if __name__ == "__main__":
 
         source_path  = os.path.join(pwd, 'random_divide.py')
         destination_path = os.path.join(f'{pwd}/{key}', 'random_divide.py')
-        shutil.copy(source_path, destination_path)
-        source_path  = os.path.join(pwd, 'auto_train.sh')
-        destination_path = os.path.join(f'{pwd}/{key}', 'auto_train.sh')
         shutil.copy(source_path, destination_path)
