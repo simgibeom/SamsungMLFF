@@ -3,7 +3,6 @@ import random
 import os
 from ase import Atoms, Atom
 from ase.io import read, write, Trajectory
-from mpi4py import MPI
 
 def randomize_list(input_number):
     original_list = list(range(input_number))
@@ -20,7 +19,7 @@ def get_list_to_divide(filename, each_subset_size):
     each_subset_size_list = []
     quotient = len_train // each_subset_size
     remainder = len_train % each_subset_size
-    if remainder < (each_subset_size*0.9):
+    if remainder < (each_subset_size*0.80):
         quo = remainder // quotient
         rem = remainder % quotient
         for i in range(quotient):
@@ -36,6 +35,8 @@ def get_list_to_divide(filename, each_subset_size):
     print(f'\n sum(each_subset_size_list):{sum(each_subset_size_list)} == len(train):{len(train)}')
     print(f'\n """ \n This training data set will be randomly divided into {len(each_subset_size_list)}.')
     print(f' And models for each subset will be trained automatically. \n """ \n')
+    with open('list_number.txt', "w" ) as file:
+        print(len(each_subset_size_list)-1, end=" ", file=file)
     return each_subset_size_list
 
 def generate_subset_randomly(filename, each_subset_size=50):
@@ -52,6 +53,9 @@ def generate_subset_randomly(filename, each_subset_size=50):
         size += each_subset_size_list[i]
 
 
-
-filename = 'Si_6.975.traj'
-generate_subset_randomly(filename, each_subset_size=30)
+import os
+import glob
+pwd = '.'
+current_dir = os.getcwd()
+filename = glob.glob(os.path.join(current_dir, 'Si*.traj'))[0]
+generate_subset_randomly(filename, each_subset_size=20)

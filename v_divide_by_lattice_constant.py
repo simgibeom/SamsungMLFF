@@ -113,43 +113,35 @@ def index_sort_by_energy(indices_list, energies_list):
     sorted_index = sorted(index_ene, key=index_ene.get)
     return sorted_index
 
-import os
-import glob
-pwd = '.'
-current_dir = os.getcwd()
-filename = glob.glob(os.path.join(current_dir, 'Si*.traj'))[0]
-print(current_dir, filename)
-atoms = Trajectory(filename)
-lattice_const_dict = {}
-values = []
-print('lattice constant','|',  'number of data')
-for i in range(len(atoms)):
-    atom = atoms[i]
-    cell = atom.get_cell().copy()
-    if round(cell[2][2],1) in lattice_const_dict:
-        lattice_const_dict[round(cell[2][2],1)] += [i]
-    else:
-        lattice_const_dict[round(cell[2][2],1)] = [i]
-for key in lattice_const_dict:
-    value = lattice_const_dict[key]
-    values += [len(value)]
-    traj = Trajectory(f'Si_{key}.traj', 'w')
-    print(key,'\t\t\t\t', len(value))
-    for i in range(len(value)):
-        traj.write(atoms[value[i]])
-    traj.close()
-    
-    os.makedirs(f'{pwd}/{key}', exist_ok = True)
-    source_path  = os.path.join(pwd, f'Si_{key}.traj')
-    destination_path = os.path.join(f'{pwd}/{key}', f'Si_{key}.traj')
-    shutil.move(source_path, destination_path)
-print('------------------------------')
-print(filename, '\t\t\t\t', len(atoms))
-keys = [key for key in lattice_const_dict]
 
-with open('keys.txt', "w" ) as file:
-    for i in keys:
-        print(i, end=" ", file=file)
-with open('values.txt', "w" ) as file:
-    for i in values:
-        print(i, end=" ", file=file)
+if __name__ == "__main__":
+    import os
+    import glob
+    pwd = '.'
+    current_dir = os.getcwd()
+    filename = glob.glob(os.path.join(current_dir, 'v_Si*.traj'))[0]
+    print(current_dir, filename)
+    atoms = Trajectory(filename)
+    lattice_const_dict = {}
+    print('lattice constant','|',  'number of data')
+    for i in range(len(atoms)):
+        atom = atoms[i]
+        cell = atom.get_cell().copy()
+        if round(cell[2][2],1) in lattice_const_dict:
+            lattice_const_dict[round(cell[2][2],1)] += [i]
+        else:
+            lattice_const_dict[round(cell[2][2],1)] = [i]
+    for key in lattice_const_dict:
+        value = lattice_const_dict[key]
+        traj = Trajectory(f'v_Si_{key}.traj', 'w')
+        print(key,'\t\t\t\t', len(value))
+        for i in range(len(value)):
+            traj.write(atoms[value[i]])
+        traj.close()
+        
+        os.makedirs(f'{pwd}/{key}', exist_ok = True)
+        source_path  = os.path.join(pwd, f'v_Si_{key}.traj')
+        destination_path = os.path.join(f'{pwd}/{key}', f'v_Si_{key}.traj')
+        shutil.move(source_path, destination_path)
+    print('------------------------------')
+    print(filename, '\t\t\t\t', len(atoms))
